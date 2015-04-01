@@ -64,24 +64,24 @@ with open (sys.argv[1],'rb') as f:
     blockBin = struct.pack('I32s32sIII',versionNumber, prevHash[::-1], merkleRoot[::-1], timeStamp, difficulty, nonce)
     blockHash = hashlib.sha256(hashlib.sha256(blockBin).digest()).digest()[::-1]
     transactionCount = varint(f)
-    #print 'magicID:', magicID
-    #print 'headerLength:', headerLength
-    #print 'versionNumber:', versionNumber
-    #print 'prevHash:', prevHash.encode('hex_codec')
-    #print 'merkleRoot:', merkleRoot.encode('hex_codec')
-    #print 'timeStamp:', timestr(timeStamp)
-    #print 'difficulty:', difficulty
-    #print 'nonce:', nonce
-    #print 'transactionCount:', transactionCount
+    print 'magicID:', magicID
+    print 'headerLength:', headerLength
+    print 'versionNumber:', versionNumber
+    print 'prevHash:', prevHash.encode('hex_codec')
+    print 'merkleRoot:', merkleRoot.encode('hex_codec')
+    print 'timeStamp:', timestr(timeStamp)
+    print 'difficulty:', difficulty
+    print 'nonce:', nonce
+    print 'transactionCount:', transactionCount
     print 'blockHash:', blockHash.encode('hex_codec')
     print '============Transaction============'
     for i in range(transactionCount):
       transactionVersionNumber = uint32_t(f)
       inputCount = varint(f)
       transactionBin = struct.pack('I', transactionVersionNumber) + packWithVarint(inputCount)
-      #print 'transactionVersionNumber:', transactionVersionNumber
-      #print 'inputCount:', inputCount
-      #print '---------------Input---------------'
+      print 'transactionVersionNumber:', transactionVersionNumber
+      print 'inputCount:', inputCount
+      print '---------------Input---------------'
       for j in range(inputCount):
         transactionHash = hash32(f)
         transactionIndex = uint32_t(f)
@@ -89,32 +89,32 @@ with open (sys.argv[1],'rb') as f:
         inputScript = script(f, scriptLength)
         sequenceNumber = uint32_t(f)
         transactionBin = transactionBin + transactionHash[::-1] + struct.pack('I', transactionIndex) + packWithVarint(scriptLength) + inputScript + struct.pack('I', sequenceNumber)
-        #print 'transactionHash:', transactionHash.encode('hex_codec')
-        #print 'transactionIndex:', ('%x' % transactionIndex)
-        #print 'scriptLength:', scriptLength
-        #print 'inputScript:', inputScript.encode('hex_codec')
-        #print 'sequenceNumber:', ('%x' % sequenceNumber)
-        #print '-----------------------------------'
+        print 'transactionHash:', transactionHash.encode('hex_codec')
+        print 'transactionIndex:', ('%x' % transactionIndex)
+        print 'scriptLength:', scriptLength
+        print 'inputScript:', inputScript.encode('hex_codec')
+        print 'sequenceNumber:', ('%x' % sequenceNumber)
+        print '-----------------------------------'
       outputCount = varint(f)
       transactionBin = transactionBin + packWithVarint(outputCount)
-      #print 'outputCount:', outputCount
-      #print '--------------Output---------------'
+      print 'outputCount:', outputCount
+      print '--------------Output---------------'
       for j in range(outputCount):
         value = uint64_t(f)
         outputScriptLength = varint(f)
         outputScript = script(f,outputScriptLength)
         transactionBin = transactionBin + struct.pack('Q', value) + packWithVarint(outputScriptLength) + outputScript
-        #print 'value:', value
-        #print 'outputScriptLength:', outputScriptLength
+        print 'value:', value
+        print 'outputScriptLength:', outputScriptLength
         print 'outputScript', outputScript.encode('hex_codec')
-        #print '-----------------------------------'
+        print '-----------------------------------'
       transactionLockTime = uint32_t(f)
       transactionBin = transactionBin + struct.pack('I', transactionLockTime)
       transactionHash = hashlib.sha256(hashlib.sha256(transactionBin).digest()).digest()[::-1]
-      #print 'transactionLockTime:', transactionLockTime
+      print 'transactionLockTime:', transactionLockTime
       print 'transactionHash:', transactionHash.encode('hex_codec')
       print '==================================='
     break
 endtime = time.clock()
-#print 'total:', total
-#print 'runtime:', endtime - starttime
+print 'total:', total
+print 'runtime:', endtime - starttime
